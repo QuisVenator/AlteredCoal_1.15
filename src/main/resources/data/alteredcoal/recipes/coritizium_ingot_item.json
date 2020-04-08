@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "alteredcoal:coritizium_nugget_item"
+    }
+  },
+  "result": {
+    "item": "alteredcoal:coritizium_ingot_item"
+  }
+}

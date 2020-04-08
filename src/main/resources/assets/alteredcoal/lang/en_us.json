@@ -1,0 +1,9 @@
+{
+	"item.alteredcoal.stack_item": "Stack",
+	"item.alteredcoal.coritizium_nugget_item": "Coritizium Nugget",
+	"item.alteredcoal.coritizium_ingot_item": "Coritizium Ingot",
+	
+	"block.alteredcoal.coritizium_ore_block" : "Coritizium Ore",
+	
+	"itemGroup.actab": "Altered Coal"
+}

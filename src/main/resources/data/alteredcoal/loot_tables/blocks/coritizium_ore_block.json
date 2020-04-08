@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:block",
+	"pools":
+	[
+		{
+			"name":"alteredcoal:coritizium_ore_block-pool",
+			"rolls":1,
+			"entries":
+			[
+				{
+					"type":"minecraft:item",
+					"functions": [
+            			{
+              				"function": "minecraft:apply_bonus",
+              				"enchantment": "minecraft:fortune",
+              				"formula": "minecraft:ore_drops"
+            			}
+            		],
+					"name":"alteredcoal:coritizium_nugget_item"
+				}
+			]
+		}
+	]
+}
