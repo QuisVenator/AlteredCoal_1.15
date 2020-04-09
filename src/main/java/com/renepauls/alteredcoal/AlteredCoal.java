@@ -1,5 +1,7 @@
 package com.renepauls.alteredcoal;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -9,6 +11,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -19,9 +22,12 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.renepauls.alteredcoal.entities.SnowMobileEntity;
 import com.renepauls.alteredcoal.init.BlockInit;
 import com.renepauls.alteredcoal.init.ItemInit;
 import com.renepauls.alteredcoal.init.ModEntityTypes;
+import com.renepauls.alteredcoal.network.PacketHandler;
+import com.renepauls.alteredcoal.util.KeyboardHelper;
 
 @Mod("alteredcoal")
 public class AlteredCoal
@@ -50,11 +56,11 @@ public class AlteredCoal
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-
+    	PacketHandler.register();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-
+    	KeyboardHelper.collectAndRegister();
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

@@ -290,7 +290,6 @@ public class SnowMobile2EntityModel<T extends SnowMobileEntity> extends EntityMo
 	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks,
 			float netHeadYaw, float headPitch) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
