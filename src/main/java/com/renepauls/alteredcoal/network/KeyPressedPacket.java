@@ -49,6 +49,12 @@ public class KeyPressedPacket {
 				else if(msg.keyCode == KeyboardHelper.TOGGLE_MOUSE_CONTROLS.getKey().getKeyCode()) {
 					vehicle.toggleMouseControls();
 				}
+				else if(msg.keyCode == KeyboardHelper.TURN_LEFT.getKey().getKeyCode()) {
+					vehicle.steerLeft();
+				}
+				else if(msg.keyCode == KeyboardHelper.TURN_RIGHT.getKey().getKeyCode()) {
+					vehicle.steerRight();
+				}
 			}
     	});
     	ctx.get().setPacketHandled(true);

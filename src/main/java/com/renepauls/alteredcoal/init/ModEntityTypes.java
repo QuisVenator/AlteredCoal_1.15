@@ -26,10 +26,6 @@ public class ModEntityTypes {
 	EntityType.Builder.<SimpleCarEntity>create(SimpleCarEntity::new, 
 		EntityClassification.CREATURE).size(1.0f, 1.0f).build(new ResourceLocation(AlteredCoal.MOD_ID, "beta_car_entity").toString()));
 	
-	public static final RegistryObject<EntityType<SnowMobileEntity>> SNOW_MOBILE_ENTITY = ENTITY_TYPES.register("snow_mobile_entity", () -> 
-	EntityType.Builder.<SnowMobileEntity>create(SnowMobileEntity::new, 
-		EntityClassification.CREATURE).size(1.0f, 1.0f).build(new ResourceLocation(AlteredCoal.MOD_ID, "snow_mobile_entity").toString()));
-	
 	public static final RegistryObject<EntityType<SnowMobileEntity>> SNOW_MOBILE_2_ENTITY = ENTITY_TYPES.register("snow_mobile_2_entity", () -> 
 	EntityType.Builder.<SnowMobileEntity>create(SnowMobileEntity::new, 
 		EntityClassification.CREATURE).size(1.0f, 1.0f).build(new ResourceLocation(AlteredCoal.MOD_ID, "snow_mobile_2_entity").toString()));

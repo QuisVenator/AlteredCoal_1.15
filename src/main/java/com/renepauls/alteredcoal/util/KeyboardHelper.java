@@ -16,7 +16,9 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -57,19 +59,29 @@ public class KeyboardHelper
 	@SubscribeEvent
 	public static void clientTick(ClientTickEvent event) {
 		//System.out.println("Tick");
-		for(KeyBinding key : HOLD_KEYS) {		
-			if(key.isKeyDown()) {
-				System.out.println("Sending packet...");
-			
-				PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
+		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof SnowMobileEntity) {
+			for(KeyBinding key : HOLD_KEYS) {		
+				if(key.isKeyDown()) {
+					System.out.println("Sending packet...");
+				
+					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
+				}
+			}
+			for(KeyBinding key : TOGGLE_KEYS) {		
+				if(key.isPressed()) {
+					System.out.println("Sending packet...");
+				
+					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
+				}
 			}
 		}
-		for(KeyBinding key : TOGGLE_KEYS) {		
-			if(key.isPressed()) {
-				System.out.println("Sending packet...");
-			
-				PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
-			}
+	}
+	
+	@SubscribeEvent
+	public static void renderEvent(RenderGameOverlayEvent.Pre event) {
+		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof SnowMobileEntity) {
+			if(!((SnowMobileEntity)Minecraft.getInstance().player.getRidingEntity()).mouseControlsEnabled)
+			Minecraft.getInstance().getRenderViewEntity().rotationYaw = ((SnowMobileEntity)Minecraft.getInstance().player.getRidingEntity()).vehicleRotation;
 		}
 	}
 }

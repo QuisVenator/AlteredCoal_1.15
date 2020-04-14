@@ -23,7 +23,6 @@ public class ClientEventBusSubscriber {
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WHITE_BOX_ENTITY.get(), WhiteBoxEntityRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BETA_CAR_ENTITY.get(), BetaCarEntityRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SIMPLE_CAR_ENTITY.get(), SimpleCarEntityRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNOW_MOBILE_ENTITY.get(), SnowMobileEntityRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNOW_MOBILE_2_ENTITY.get(), SnowMobile2EntityRenderer::new);
 	}
 	
