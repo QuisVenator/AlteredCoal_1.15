@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.renepauls.alteredcoal.entities.vehicle.SeatManager;
 import com.renepauls.alteredcoal.init.BlockInit;
 
 import net.minecraft.block.BlockState;
@@ -56,9 +57,9 @@ public class SnowMobileEntity extends LivingEntity{
 
 	public boolean mouseControlsEnabled = false;
 	public float vehicleRotation, prevVehicleRotation;
-	private static final DataParameter<Float> steerRotation = EntityDataManager.createKey(SnowMobileEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> mouseControlEnabled = EntityDataManager.createKey(SnowMobileEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Float> rotation = EntityDataManager.createKey(SnowMobileEntity.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Float> steerRotation = EntityDataManager.createKey(SnowMobileEntity.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Boolean> mouseControlEnabled = EntityDataManager.createKey(SnowMobileEntity.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Float> rotation = EntityDataManager.createKey(SnowMobileEntity.class, DataSerializers.FLOAT);
 	protected float prevSteerRotation = 0f, curSteerRotation = 0f;
 	private double maxVelocity = 0.8;
 	private double currentVelocity = 0;
@@ -67,9 +68,15 @@ public class SnowMobileEntity extends LivingEntity{
 	private Vec3d curLightPosition[] = new Vec3d[21];
 	private BlockPos curLightPos;
 	private boolean lightsOn = false;
+	public float maxSteer = 15;
+	public float steerDegree = 6;
+	public SeatManager seatManager;
 	
 	public SnowMobileEntity(EntityType<? extends LivingEntity> type, World worldIn) {
 		super(type, worldIn);
+		
+		seatManager = new SeatManager(this);
+		
 		//allow to go up one block
 		this.stepHeight = 1.0f;
 		
@@ -99,12 +106,12 @@ public class SnowMobileEntity extends LivingEntity{
 			}
 			
 			if(currentVelocity > 0.01) {
-				if(dataManager.get(steerRotation) > 6f) {
-					dataManager.set(rotation, this.vehicleRotation + 6f);
-					dataManager.set(steerRotation, dataManager.get(steerRotation) - 6f);
-				} else if(dataManager.get(steerRotation) < -6f) {
-					dataManager.set(rotation, this.vehicleRotation - 6f);
-					dataManager.set(steerRotation, dataManager.get(steerRotation) + 6f);
+				if(dataManager.get(steerRotation) > steerDegree) {
+					dataManager.set(rotation, this.vehicleRotation + steerDegree);
+					dataManager.set(steerRotation, dataManager.get(steerRotation) - steerDegree);
+				} else if(dataManager.get(steerRotation) < -steerDegree) {
+					dataManager.set(rotation, this.vehicleRotation - steerDegree);
+					dataManager.set(steerRotation, dataManager.get(steerRotation) + steerDegree);
 				} else {
 					dataManager.set(rotation, this.vehicleRotation + getSteerRotation());
 					dataManager.set(steerRotation, 0f);
@@ -133,10 +140,6 @@ public class SnowMobileEntity extends LivingEntity{
 		this.vehicleRotation = dataManager.get(rotation) % 360;
 		
 		super.tick();
-		
-		//copied tick
-		
-		//end copied tick
 	}
 	
 	public void decelerate() {
@@ -210,12 +213,12 @@ public class SnowMobileEntity extends LivingEntity{
 	}
 	
 	public void steerLeft() {
-		if(dataManager.get(steerRotation) > -15)
-			dataManager.set(steerRotation, getSteerRotation() - 6f);
+		if(dataManager.get(steerRotation) > -maxSteer)
+			dataManager.set(steerRotation, getSteerRotation() - steerDegree);
 	}
 	public void steerRight() {
-		if(dataManager.get(steerRotation) < 15)
-			dataManager.set(steerRotation, getSteerRotation() + 6f);
+		if(dataManager.get(steerRotation) < maxSteer)
+			dataManager.set(steerRotation, getSteerRotation() + steerDegree);
 	}
 	public float getSteerRotation() {
 		return dataManager.get(steerRotation);
@@ -246,24 +249,25 @@ public class SnowMobileEntity extends LivingEntity{
 	}
 
 	//TODO remove
-	/*
 	//overriden to call custom, named function instead of unmapped one!
 	@Override
 	public void updatePassenger(Entity passenger) {
-	   this.func_226266_a_(passenger, Entity::setPosition);
+	   this.setPositionPassenger(passenger, Entity::setPosition);
 	}
 	//does basically the same as unmapped function func_226266_a_ (also adds xOffset
 	//gets called from updatePassenger
 	public void setPositionPassenger(Entity passenger, Entity.IMoveCallback positionSetter) {
 	   if (this.isPassenger(passenger)) {
-	      positionSetter.accept(passenger, this.getPosX() + seatOffset(), this.getPosY() + this.getMountedYOffset() + passenger.getYOffset(), this.getPosZ());
+	      positionSetter.accept(passenger, this.getPosX() + seatXOffset(), this.getPosY() + this.getMountedYOffset() + passenger.getYOffset(), this.getPosZ() + seatZOffset());
 	   }
 	}
-	*/
-	
+
 	//should set an offset for the seat TODO get to work
-	public float seatOffset() {
-		return 0.8f;
+	public float seatXOffset() {
+		return 0f;
+	}
+	public float seatZOffset() {
+		return 0f;
 	}
 	@Override
 	public double getMountedYOffset() {
@@ -364,7 +368,6 @@ public class SnowMobileEntity extends LivingEntity{
 	                  }
 	               } else {
 	                  BlockPos blockpos = this.getPositionUnderneath();
-	                  float f5 = this.world.getBlockState(blockpos).getSlipperiness(world, blockpos, this);
 	                  float f7 = this.onGround ? 0.6f * 0.91F : 0.91F;
 	                  this.moveRelative(this.getRelevantMoveFactor(0.6f), p_213352_1_);
 	                  this.setMotion(this.getMotion());

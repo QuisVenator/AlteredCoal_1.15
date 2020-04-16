@@ -25,10 +25,12 @@ public class ModEntityTypes {
 	public static final RegistryObject<EntityType<SimpleCarEntity>> SIMPLE_CAR_ENTITY = ENTITY_TYPES.register("simple_car_entity", () -> 
 	EntityType.Builder.<SimpleCarEntity>create(SimpleCarEntity::new, 
 		EntityClassification.CREATURE).size(1.0f, 1.0f).build(new ResourceLocation(AlteredCoal.MOD_ID, "beta_car_entity").toString()));
-	
+
 	public static final RegistryObject<EntityType<SnowMobileEntity>> SNOW_MOBILE_2_ENTITY = ENTITY_TYPES.register("snow_mobile_2_entity", () -> 
 	EntityType.Builder.<SnowMobileEntity>create(SnowMobileEntity::new, 
 		EntityClassification.CREATURE).size(1.0f, 1.0f).build(new ResourceLocation(AlteredCoal.MOD_ID, "snow_mobile_2_entity").toString()));
 	
-	
+	public static final RegistryObject<EntityType<BaseTruckEntity>> BASE_TRUCK_ENTITY = ENTITY_TYPES.register("base_truck_entity", () -> 
+	EntityType.Builder.<BaseTruckEntity>create(BaseTruckEntity::new, 
+		EntityClassification.CREATURE).size(4.0f, 3.0f).build(new ResourceLocation(AlteredCoal.MOD_ID, "base_truck_entity").toString()));
 }
