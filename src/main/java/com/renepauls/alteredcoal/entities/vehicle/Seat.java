@@ -1,6 +1,7 @@
 package com.renepauls.alteredcoal.entities.vehicle;
 
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -46,7 +47,16 @@ public class Seat {
 		return seatHolder != null;
 	}
 	
-	public float distance(SnowMobileEntity vehicleIn, Vec3d pos) {
+	public float distance(LandVehicleEntity vehicleIn, Vec3d pos) {
 		return (float) pos.distanceTo(vehicleIn.getPositionVec().add(xOffset(vehicleIn.vehicleRotation), yOffset(), zOffset(vehicleIn.vehicleRotation)));
+	}
+	
+	@CheckForNull
+	public Entity getPassenger() {
+		return seatHolder;
+	}
+	
+	public void freeSeat() {
+		seatHolder = null;
 	}
 }

@@ -2,6 +2,8 @@ package com.renepauls.alteredcoal.init;
 
 import com.renepauls.alteredcoal.AlteredCoal;
 import com.renepauls.alteredcoal.entities.*;
+import com.renepauls.alteredcoal.entities.vehicle.BaseTruckEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;

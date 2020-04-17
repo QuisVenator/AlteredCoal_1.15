@@ -22,7 +22,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 import com.renepauls.alteredcoal.init.BlockInit;
 import com.renepauls.alteredcoal.init.ItemInit;
 import com.renepauls.alteredcoal.init.ModEntityTypes;

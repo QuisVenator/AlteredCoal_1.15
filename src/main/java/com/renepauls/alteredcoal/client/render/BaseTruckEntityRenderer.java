@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.renepauls.alteredcoal.AlteredCoal;
 import com.renepauls.alteredcoal.client.model.BaseTruckEntityModel;
 import com.renepauls.alteredcoal.client.model.SnowMobile2EntityModel;
-import com.renepauls.alteredcoal.entities.BaseTruckEntity;
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.BaseTruckEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -62,7 +62,7 @@ public class BaseTruckEntityRenderer extends EntityRenderer<BaseTruckEntity> {
 		   //System.out.println("Partial ticks: " + partialTicks);
 
 		   float steer = MathHelper.interpolateAngle(partialTicks, entityIn.getPrevSteerRotation(), entityIn.getCurSteerRotation());
-		   matrixStackIn.rotate(Vector3f.YP.rotationDegrees(steer));
+		   entityModel.rotateSteer(steer);
 		   this.entityModel.renderSteering(matrixStackIn, ivertexbuilder, packedLightIn, 0xA0000, 1.0F, 1.0F, 1.0F, 1.0F);
 		}
 	

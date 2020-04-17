@@ -2,7 +2,7 @@ package com.renepauls.alteredcoal.network;
 
 import java.util.function.Supplier;
 
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.LandVehicleEntity;
 import com.renepauls.alteredcoal.util.KeyboardHelper;
 
 import io.netty.buffer.ByteBuf;
@@ -33,8 +33,8 @@ public class KeyPressedPacket {
 			PlayerEntity player = ctx.get().getSender();
 			Entity entity = player.getRidingEntity();
     	
-			if(entity instanceof SnowMobileEntity) {
-				SnowMobileEntity vehicle = (SnowMobileEntity)entity;
+			if(entity instanceof LandVehicleEntity) {
+				LandVehicleEntity vehicle = (LandVehicleEntity)entity;
 				
 				if(msg.keyCode == KeyboardHelper.LIGHT_ON.getKey().getKeyCode()) {
     		
@@ -54,6 +54,9 @@ public class KeyPressedPacket {
 				}
 				else if(msg.keyCode == KeyboardHelper.TURN_RIGHT.getKey().getKeyCode()) {
 					vehicle.steerRight();
+				}
+				else if(msg.keyCode == KeyboardHelper.SWITCH_SEAT.getKey().getKeyCode()) {
+					vehicle.seatManager.switchSeat(player);
 				}
 			}
     	});

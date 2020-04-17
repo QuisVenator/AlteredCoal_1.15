@@ -2,7 +2,7 @@ package com.renepauls.alteredcoal.util;
 
 import com.renepauls.alteredcoal.AlteredCoal;
 import com.renepauls.alteredcoal.client.render.*;
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 import com.renepauls.alteredcoal.init.ModEntityTypes;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.renepauls.alteredcoal.AlteredCoal;
 import com.renepauls.alteredcoal.client.model.SnowMobile2EntityModel;
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.glfw.GLFW;
 
 import com.renepauls.alteredcoal.AlteredCoal;
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.LandVehicleEntity;
 import com.renepauls.alteredcoal.network.KeyPressedPacket;
 import com.renepauls.alteredcoal.network.PacketHandler;
 
@@ -37,6 +37,7 @@ public class KeyboardHelper
 	public static final KeyBinding ASCEND = new KeyBinding(AlteredCoal.MOD_ID+".key.ascend", GLFW.GLFW_KEY_SPACE, "key.categories.vehicles");
 	public static final KeyBinding DESCEND = new KeyBinding(AlteredCoal.MOD_ID+".key.descend", GLFW.GLFW_KEY_LEFT_SHIFT, "key.categories.vehicles");
 	public static final KeyBinding TOGGLE_MOUSE_CONTROLS = new KeyBinding(AlteredCoal.MOD_ID+".key.toggle_mouse_control", GLFW.GLFW_MOUSE_BUTTON_3, "key.categories.vehicles");
+	public static final KeyBinding SWITCH_SEAT = new KeyBinding(AlteredCoal.MOD_ID+".key.switch_seat", GLFW.GLFW_KEY_C, "key.categories.vehicles");
 	
 	public static void collectAndRegister() {
 		TOGGLE_KEYS.add(LIGHT_ON);
@@ -47,6 +48,7 @@ public class KeyboardHelper
 		HOLD_KEYS.add(ASCEND);
 		HOLD_KEYS.add(DESCEND);
 		TOGGLE_KEYS.add(TOGGLE_MOUSE_CONTROLS);
+		TOGGLE_KEYS.add(SWITCH_SEAT);
 
 		for(KeyBinding key : HOLD_KEYS) {
 			ClientRegistry.registerKeyBinding(key);
@@ -59,18 +61,17 @@ public class KeyboardHelper
 	@SubscribeEvent
 	public static void clientTick(ClientTickEvent event) {
 		//System.out.println("Tick");
-		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof SnowMobileEntity) {
+		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof LandVehicleEntity) {
 			for(KeyBinding key : HOLD_KEYS) {		
 				if(key.isKeyDown()) {
-					System.out.println("Sending packet...");
-				
 					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
 				}
 			}
 			for(KeyBinding key : TOGGLE_KEYS) {		
 				if(key.isPressed()) {
-					System.out.println("Sending packet...");
-				
+					if(key == SWITCH_SEAT) {
+						((LandVehicleEntity)Minecraft.getInstance().player.getRidingEntity()).seatManager.switchSeat(Minecraft.getInstance().player);
+					}
 					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
 				}
 			}
@@ -79,9 +80,9 @@ public class KeyboardHelper
 	
 	@SubscribeEvent
 	public static void renderEvent(RenderGameOverlayEvent.Pre event) {
-		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof SnowMobileEntity) {
-			if(!((SnowMobileEntity)Minecraft.getInstance().player.getRidingEntity()).mouseControlsEnabled)
-			Minecraft.getInstance().getRenderViewEntity().rotationYaw = ((SnowMobileEntity)Minecraft.getInstance().player.getRidingEntity()).vehicleRotation;
+		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof LandVehicleEntity) {
+			if(!((LandVehicleEntity)Minecraft.getInstance().player.getRidingEntity()).mouseControlsEnabled)
+			Minecraft.getInstance().getRenderViewEntity().rotationYaw = ((LandVehicleEntity)Minecraft.getInstance().player.getRidingEntity()).vehicleRotation;
 		}
 	}
 }

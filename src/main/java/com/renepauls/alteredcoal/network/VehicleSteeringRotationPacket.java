@@ -2,7 +2,7 @@ package com.renepauls.alteredcoal.network;
 
 import java.util.function.Supplier;
 
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 import com.renepauls.alteredcoal.util.KeyboardHelper;
 
 import io.netty.buffer.ByteBuf;
@@ -27,7 +27,6 @@ public class VehicleSteeringRotationPacket {
     }
 
     public static void handle(final VehicleSteeringRotationPacket msg, Supplier<NetworkEvent.Context> ctx) {
-    	System.out.println("Received package...");
     	ctx.get().enqueueWork(() -> {
     		
 			PlayerEntity player = ctx.get().getSender();

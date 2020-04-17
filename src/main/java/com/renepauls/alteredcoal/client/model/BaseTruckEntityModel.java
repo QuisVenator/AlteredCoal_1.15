@@ -2,8 +2,8 @@ package com.renepauls.alteredcoal.client.model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.renepauls.alteredcoal.entities.BaseTruckEntity;
-import com.renepauls.alteredcoal.entities.SnowMobileEntity;
+import com.renepauls.alteredcoal.entities.vehicle.BaseTruckEntity;
+import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -435,14 +435,14 @@ public class BaseTruckEntityModel<T extends BaseTruckEntity> extends EntityModel
 
 
 		steer = new ModelRenderer(this);
-		steer.setRotationPoint(44.0F, 3.0F, -27.0F);
-		steer.setTextureOffset(108, 273).addBox( -40.0F, -1.0F, 0.0F, 8, 2, 1, 0.0F, false);
+		steer.setRotationPoint(8.0F, 3.0F, -27.0F);
+		steer.setTextureOffset(108, 273).addBox( -4.0F, -1.0F, 0.0F, 8, 2, 1, 0.0F, false);
 
-		steer.setTextureOffset(154, 280).addBox( -37.0F, -4.0F, 0.0F, 2, 8, 1, 0.0F, false);
+		steer.setTextureOffset(154, 280).addBox( -1.0F, -4.0F, 0.0F, 2, 8, 1, 0.0F, false);
 
 
 		leftToRightDown = new ModelRenderer(this);
-		leftToRightDown.setRotationPoint(-32.0F, -2.0F, 0.0F);
+		leftToRightDown.setRotationPoint(4.0F, -2.0F, 0.0F);
 		setRotationAngle(leftToRightDown, 0.0F, 0.0F, 0.7854F);
 		steer.addChild(leftToRightDown);
 		leftToRightDown.setTextureOffset(174, 280).addBox( 1.1213F, 2.2213F, 0.0F, 1, 4, 1, 0.0F, false);
@@ -451,7 +451,7 @@ public class BaseTruckEntityModel<T extends BaseTruckEntity> extends EntityModel
 
 
 		leftToRightUp = new ModelRenderer(this);
-		leftToRightUp.setRotationPoint(-32.0F, -2.0F, 0.0F);
+		leftToRightUp.setRotationPoint(4.0F, -2.0F, 0.0F);
 		setRotationAngle(leftToRightUp, 0.0F, 0.0F, -0.7854F);
 		steer.addChild(leftToRightUp);
 		leftToRightUp.setTextureOffset(182, 280).addBox( -1.7071F, -3.4355F, 0.0F, 1, 4, 1, 0.0F, false);
@@ -485,6 +485,10 @@ public class BaseTruckEntityModel<T extends BaseTruckEntity> extends EntityModel
 	
 	public void renderSteering(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn,
 			float red, float green, float blue, float alpha) {
-		//TODO add steering
+		steer.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	}
+	
+	public void rotateSteer(float angle) {
+		steer.rotateAngleZ = (float) (angle / -90f * Math.PI);
 	}
 }
