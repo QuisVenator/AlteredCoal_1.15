@@ -40,21 +40,22 @@ public class KeyboardHelper
 	public static final KeyBinding SWITCH_SEAT = new KeyBinding(AlteredCoal.MOD_ID+".key.switch_seat", GLFW.GLFW_KEY_C, "key.categories.vehicles");
 	
 	public static void collectAndRegister() {
-		TOGGLE_KEYS.add(LIGHT_ON);
 		HOLD_KEYS.add(ACCELERATE);
 		HOLD_KEYS.add(SLOW_DOWN);
 		HOLD_KEYS.add(TURN_LEFT);
 		HOLD_KEYS.add(TURN_RIGHT);
 		HOLD_KEYS.add(ASCEND);
 		HOLD_KEYS.add(DESCEND);
+		
+		TOGGLE_KEYS.add(LIGHT_ON);
 		TOGGLE_KEYS.add(TOGGLE_MOUSE_CONTROLS);
 		TOGGLE_KEYS.add(SWITCH_SEAT);
 
-		for(KeyBinding key : HOLD_KEYS) {
-			ClientRegistry.registerKeyBinding(key);
+		for(int i = 0; i < HOLD_KEYS.size(); i++) {
+			ClientRegistry.registerKeyBinding(HOLD_KEYS.get(i));
 		}
-		for(KeyBinding key : TOGGLE_KEYS) {
-			ClientRegistry.registerKeyBinding(key);
+		for(int i = 0; i < TOGGLE_KEYS.size(); i++) {
+			ClientRegistry.registerKeyBinding(TOGGLE_KEYS.get(i));
 		}
 	}
 
@@ -62,17 +63,18 @@ public class KeyboardHelper
 	public static void clientTick(ClientTickEvent event) {
 		//System.out.println("Tick");
 		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof LandVehicleEntity) {
-			for(KeyBinding key : HOLD_KEYS) {		
-				if(key.isKeyDown()) {
-					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
+			for(int i = 0; i < HOLD_KEYS.size(); i++) {		
+				if(HOLD_KEYS.get(i).isKeyDown()) {
+					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(i));
 				}
 			}
-			for(KeyBinding key : TOGGLE_KEYS) {		
-				if(key.isPressed()) {
-					if(key == SWITCH_SEAT) {
-						((LandVehicleEntity)Minecraft.getInstance().player.getRidingEntity()).seatManager.switchSeat(Minecraft.getInstance().player);
+			for(int i = 0; i < TOGGLE_KEYS.size(); i++) {		
+				if(TOGGLE_KEYS.get(i).isPressed()) {
+					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(i+100));
+					if(TOGGLE_KEYS.get(i) == SWITCH_SEAT) {
+						//TODO make work on packages. basically the server should keep seats synchronized between all players
+						((LandVehicleEntity) Minecraft.getInstance().player.getRidingEntity()).seatManager.switchSeat(Minecraft.getInstance().player);
 					}
-					PacketHandler.INSTANCE.sendToServer(new KeyPressedPacket(key.getKey().getKeyCode()));
 				}
 			}
 		}

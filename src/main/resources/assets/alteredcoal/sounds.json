@@ -1,0 +1,11 @@
+{
+  "car_driving": {
+    "category": "neutral",
+    "sounds": [ 
+    	{
+			"name": "alteredcoal:entity/car_driving",
+			"stream": true
+    	}
+    ]
+  }
+}

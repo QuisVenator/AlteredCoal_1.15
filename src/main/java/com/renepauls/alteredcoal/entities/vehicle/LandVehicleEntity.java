@@ -7,9 +7,11 @@ import javax.annotation.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import com.renepauls.alteredcoal.init.BlockInit;
+import com.renepauls.alteredcoal.init.SoundInit;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AgeableEntity;
@@ -51,7 +53,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-//TODO make mobEntity copy to test which methods are important
+
 public class LandVehicleEntity extends LivingEntity{
 
 	public boolean mouseControlsEnabled = false;
@@ -261,7 +263,6 @@ public class LandVehicleEntity extends LivingEntity{
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		this.applyOrientationToEntity(passenger);
 		seatManager.setPositionPassenger(passenger, Entity::setPosition);
 	}
 	
@@ -269,6 +270,13 @@ public class LandVehicleEntity extends LivingEntity{
 	protected void removePassenger(Entity passenger) {
 		super.removePassenger(passenger);
 		seatManager.removePassenger(passenger);
+	}
+	
+	@Override
+	protected void playStepSound(BlockPos pos, BlockState blockIn) {
+		System.out.println("playing sound");
+		//this.playSound(SoundInit.DRIVINIG_CAR_SOUND.get(), 1, 1);
+        this.playSound(SoundInit.DRIVINIG_CAR_SOUND.get(), 100f, 1f);
 	}
 
 	//has no armor, so empty list

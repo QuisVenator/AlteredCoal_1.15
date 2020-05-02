@@ -8,6 +8,7 @@ import com.renepauls.alteredcoal.util.KeyboardHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -36,27 +37,35 @@ public class KeyPressedPacket {
 			if(entity instanceof LandVehicleEntity) {
 				LandVehicleEntity vehicle = (LandVehicleEntity)entity;
 				
-				if(msg.keyCode == KeyboardHelper.LIGHT_ON.getKey().getKeyCode()) {
-    		
-    				vehicle.toggleLights();
-    			} 
-				else if(msg.keyCode == KeyboardHelper.ACCELERATE.getKey().getKeyCode()) {
+				//TODO implement checks for it actually being the captain
+				switch(msg.keyCode) {
+				case 0:
 					vehicle.accelerate();
-    			}
-				else if(msg.keyCode == KeyboardHelper.SLOW_DOWN.getKey().getKeyCode()) {
+					break;
+				case 1:
 					vehicle.decelerate();
-				}
-				else if(msg.keyCode == KeyboardHelper.TOGGLE_MOUSE_CONTROLS.getKey().getKeyCode()) {
-					vehicle.toggleMouseControls();
-				}
-				else if(msg.keyCode == KeyboardHelper.TURN_LEFT.getKey().getKeyCode()) {
+					break;
+				case 2:
 					vehicle.steerLeft();
-				}
-				else if(msg.keyCode == KeyboardHelper.TURN_RIGHT.getKey().getKeyCode()) {
+					break;
+				case 3:
 					vehicle.steerRight();
-				}
-				else if(msg.keyCode == KeyboardHelper.SWITCH_SEAT.getKey().getKeyCode()) {
+					break;
+				case 4:
+					//ascend
+					break;
+				case 5:
+					//descend
+					break;
+				case 100:
+					vehicle.toggleLights();
+					break;
+				case 101:
+					vehicle.toggleMouseControls();
+					break;
+				case 102:
 					vehicle.seatManager.switchSeat(player);
+					break;
 				}
 			}
     	});

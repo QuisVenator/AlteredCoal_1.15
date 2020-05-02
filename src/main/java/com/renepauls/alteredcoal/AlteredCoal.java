@@ -26,6 +26,7 @@ import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 import com.renepauls.alteredcoal.init.BlockInit;
 import com.renepauls.alteredcoal.init.ItemInit;
 import com.renepauls.alteredcoal.init.ModEntityTypes;
+import com.renepauls.alteredcoal.init.SoundInit;
 import com.renepauls.alteredcoal.network.PacketHandler;
 import com.renepauls.alteredcoal.util.KeyboardHelper;
 
@@ -53,6 +54,7 @@ public class AlteredCoal
         ItemInit.ITEMS.register(eventBus);
         BlockInit.BLOCKS.register(eventBus);
         ModEntityTypes.ENTITY_TYPES.register(eventBus);
+        SoundInit.SOUNDS.register(eventBus);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
