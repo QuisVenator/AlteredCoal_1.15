@@ -357,5 +357,17 @@ public class LandVehicleEntity extends LivingEntity implements INamedContainerPr
 	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
 		return null;
 	}
-
+	
+	@Override
+	public boolean writeUnlessPassenger(CompoundNBT compound) {
+		boolean result = super.writeUnlessPassenger(compound);
+		compound.put("inventory", itemHandler.orElseThrow(null).serializeNBT());
+		return result;
+	}
+	
+	@Override
+	public void read(CompoundNBT compound) {
+		super.read(compound);
+		itemHandler.ifPresent(x -> ((ItemStackHandler)x).deserializeNBT(compound.getCompound("inventory")));
+	}
 }
