@@ -38,6 +38,7 @@ public class KeyboardHelper
 	public static final KeyBinding DESCEND = new KeyBinding(AlteredCoal.MOD_ID+".key.descend", GLFW.GLFW_KEY_LEFT_SHIFT, "key.categories.vehicles");
 	public static final KeyBinding TOGGLE_MOUSE_CONTROLS = new KeyBinding(AlteredCoal.MOD_ID+".key.toggle_mouse_control", GLFW.GLFW_MOUSE_BUTTON_3, "key.categories.vehicles");
 	public static final KeyBinding SWITCH_SEAT = new KeyBinding(AlteredCoal.MOD_ID+".key.switch_seat", GLFW.GLFW_KEY_C, "key.categories.vehicles");
+	public static final KeyBinding OPEN_INVENTORY = new KeyBinding(AlteredCoal.MOD_ID+".key.open_inventory", GLFW.GLFW_KEY_F, "key.categories.vehicles");
 	
 	public static void collectAndRegister() {
 		HOLD_KEYS.add(ACCELERATE);
@@ -50,6 +51,7 @@ public class KeyboardHelper
 		TOGGLE_KEYS.add(LIGHT_ON);
 		TOGGLE_KEYS.add(TOGGLE_MOUSE_CONTROLS);
 		TOGGLE_KEYS.add(SWITCH_SEAT);
+		TOGGLE_KEYS.add(OPEN_INVENTORY);
 
 		for(int i = 0; i < HOLD_KEYS.size(); i++) {
 			ClientRegistry.registerKeyBinding(HOLD_KEYS.get(i));
@@ -61,7 +63,6 @@ public class KeyboardHelper
 
 	@SubscribeEvent
 	public static void clientTick(ClientTickEvent event) {
-		//System.out.println("Tick");
 		if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getRidingEntity() instanceof LandVehicleEntity) {
 			for(int i = 0; i < HOLD_KEYS.size(); i++) {		
 				if(HOLD_KEYS.get(i).isKeyDown()) {

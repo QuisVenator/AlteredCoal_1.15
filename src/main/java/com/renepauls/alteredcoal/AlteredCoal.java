@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 import com.renepauls.alteredcoal.init.BlockInit;
+import com.renepauls.alteredcoal.init.GuiInit;
 import com.renepauls.alteredcoal.init.ItemInit;
 import com.renepauls.alteredcoal.init.ModEntityTypes;
 import com.renepauls.alteredcoal.init.SoundInit;
@@ -54,6 +55,7 @@ public class AlteredCoal
         ItemInit.ITEMS.register(eventBus);
         BlockInit.BLOCKS.register(eventBus);
         ModEntityTypes.ENTITY_TYPES.register(eventBus);
+        GuiInit.CONTAINER_TYPES.register(eventBus);
         SoundInit.SOUNDS.register(eventBus);
     }
 

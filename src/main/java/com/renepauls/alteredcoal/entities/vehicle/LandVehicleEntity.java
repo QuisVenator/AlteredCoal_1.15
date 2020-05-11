@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.renepauls.alteredcoal.init.BlockInit;
 import com.renepauls.alteredcoal.init.SoundInit;
+import com.renepauls.alteredcoal.objects.gui.containers.BaseTruckContainer;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -27,8 +28,12 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -41,6 +46,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -48,13 +54,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class LandVehicleEntity extends LivingEntity{
+public class LandVehicleEntity extends LivingEntity implements INamedContainerProvider {
 
 	public boolean mouseControlsEnabled = false;
 	public float vehicleRotation, prevVehicleRotation;
@@ -72,6 +85,8 @@ public class LandVehicleEntity extends LivingEntity{
 	public float maxSteer = 15;
 	public float steerDegree = 6;
 	public SeatManager seatManager;
+	protected ArrayList<ItemStack> inventorySlots = new ArrayList<ItemStack>();
+	protected LazyOptional<ItemStackHandler> itemHandler = LazyOptional.of(ItemStackHandler::new);
 	
 	public LandVehicleEntity(EntityType<? extends LivingEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -83,6 +98,15 @@ public class LandVehicleEntity extends LivingEntity{
 		dataManager.register(steerRotation, 0f);
 		dataManager.register(mouseControlEnabled, false);
 		dataManager.register(rotation, this.rotationYaw);
+	}
+	
+	//give access to item handler to other classes (for example for dropping items on killing)
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability) {
+	  if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+	    return itemHandler.cast();
+	  }
+	  return super.getCapability(capability);
 	}
 	
 	
@@ -227,6 +251,10 @@ public class LandVehicleEntity extends LivingEntity{
 		return curSteerRotation;
 	}
 	
+	public boolean hasInventory() {
+		return false;
+	}
+	
 	//first passenger in list is (for now) considered the controlling one
 	@Override
 	@Nullable
@@ -239,8 +267,11 @@ public class LandVehicleEntity extends LivingEntity{
 	//TODO make tools repair, etc.
 	@Override
 	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-		if(!world.isRemote)
+		if(!world.isRemote) {
+			//TODO remove comented code
+			//NetworkHooks.openGui((ServerPlayerEntity) player, this);
 			player.startRiding(this, false);
+		}
 		
 		return true;
 	}
@@ -320,4 +351,11 @@ public class LandVehicleEntity extends LivingEntity{
 	protected float getRelevantMoveFactor(float p_213335_1_) {
 		return this.onGround ? this.getAIMoveSpeed() * (0.21600002F / (p_213335_1_ * p_213335_1_ * p_213335_1_)) : this.jumpMovementFactor;
 	}
+
+	//this is here so the server can open the inventory of any vehicle without having to know what vehicle exactly the player is riding. To check if this type of vehicle has an inventory, hasInventory() is used
+	@Override
+	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+		return null;
+	}
+
 }
