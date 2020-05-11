@@ -27,7 +27,7 @@ version="${file.jarVersion}" #mandatory
 displayName="Altered Coal" #mandatory
 
 # A URL to query for updates for this mod. See the JSON update specification <here>
-updateJSONURL="http://myurl.me/" #optional
+updateJSONURL="http://renepauls.com/" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="http://example.com/" #optional
@@ -36,15 +36,14 @@ displayURL="http://example.com/" #optional
 logoFile="examplemod.png" #optional
 
 # A text field displayed in the mod UI
-credits="Thanks for help goes to the Forge team and TurtyWurty for help and inspiration" #optional
+credits="Thanks for help goes to the Forge team, TurtyWurty and McJty for tutorials" #optional
 
 # A text field displayed in the mod UI
 authors="QuisVenator" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Mod inspired by Netflix show "Altered Carbon". Allows the creation of stacks that hold a players soul (items and xp for now).
-Stacks can be copied and put into different bodies.
+Mod that adds very simple
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.alteredcoal]] #optional
