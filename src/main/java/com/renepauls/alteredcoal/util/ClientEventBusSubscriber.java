@@ -5,7 +5,7 @@ import com.renepauls.alteredcoal.client.render.*;
 import com.renepauls.alteredcoal.entities.vehicle.SnowMobileEntity;
 import com.renepauls.alteredcoal.init.GuiInit;
 import com.renepauls.alteredcoal.init.ModEntityTypes;
-import com.renepauls.alteredcoal.objects.gui.screens.BaseTruckScreen;
+import com.renepauls.alteredcoal.objects.gui.screens.*;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -26,6 +26,7 @@ public class ClientEventBusSubscriber {
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNOW_MOBILE_2_ENTITY.get(), SnowMobile2EntityRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BASE_TRUCK_ENTITY.get(), BaseTruckEntityRenderer::new);
 		ScreenManager.registerFactory(GuiInit.BASE_TRUCK_CONTAINER.get(), BaseTruckScreen::new);
+		ScreenManager.registerFactory(GuiInit.SNOW_MOBILE_CONTAINER.get(), SnowMobileScreen::new);
 	}
 	
 }

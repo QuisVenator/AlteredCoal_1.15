@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import com.renepauls.alteredcoal.init.BlockInit;
+import com.renepauls.alteredcoal.objects.gui.containers.BaseTruckContainer;
+import com.renepauls.alteredcoal.objects.gui.containers.SnowMobileContainer;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,8 +27,10 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -61,6 +65,11 @@ public class SnowMobileEntity extends LandVehicleEntity{
 		this.stepHeight = 1.0f;
 		
 		vehicleRotation = prevVehicleRotation = 0;
+		
+		this.itemHandler.orElseThrow(null).setSize(12);
+		for(int i = 0; i < 12; i++) {
+			this.inventorySlots.add(ItemStack.EMPTY);
+		}
 
 		seatManager.addDriverSeat(0.0f, 0.0f, this.getHeight() * 0.5f);
 	}
@@ -71,9 +80,17 @@ public class SnowMobileEntity extends LandVehicleEntity{
 		super.tick();
 	}
 	
-	//Copy of original travel method, but without considering sliperiness
+	@Override public boolean hasInventory() {
+		return true;
+	}
 
-	   public void travel(Vec3d p_213352_1_) {
+	@Override
+	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+		return new SnowMobileContainer(id, inventory, (SnowMobileEntity) this);
+	}
+	
+	//Copy of original travel method, but without considering sliperiness
+	public void travel(Vec3d p_213352_1_) {
 	      if (this.isServerWorld() || this.canPassengerSteer()) {
 	         double d0 = 0.08D;
 	         IAttributeInstance gravity = this.getAttribute(ENTITY_GRAVITY);

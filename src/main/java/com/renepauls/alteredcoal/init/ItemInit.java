@@ -3,7 +3,11 @@ package com.renepauls.alteredcoal.init;
 import com.renepauls.alteredcoal.AlteredCoal;
 import com.renepauls.alteredcoal.AlteredCoal.AlteredCoalGroup;
 
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
