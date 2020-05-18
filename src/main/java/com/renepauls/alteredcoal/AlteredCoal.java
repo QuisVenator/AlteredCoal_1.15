@@ -56,6 +56,7 @@ import com.renepauls.alteredcoal.init.ItemInit;
 import com.renepauls.alteredcoal.init.ModEntityTypes;
 import com.renepauls.alteredcoal.init.SoundInit;
 import com.renepauls.alteredcoal.network.PacketHandler;
+import com.renepauls.alteredcoal.objects.fluids.OilFluid.FluidloggableBlock;
 import com.renepauls.alteredcoal.util.KeyboardHelper;
 
 @Mod("alteredcoal")
@@ -78,15 +79,11 @@ public class AlteredCoal
         MinecraftForge.EVENT_BUS.register(this);
         
         instance = this;
-        
-        eventBus.addListener(this::loadComplete);
 
-        BLOCKS.register(eventBus);
-        ITEMS.register(eventBus);
-        FLUIDS.register(eventBus);
-        
-        BlockInit.BLOCKS.register(eventBus);
+        BlockInit.BLOCKS_WITH_ITEM.register(eventBus);
+        BlockInit.BLOCKS_WITHOUT_ITEM.register(eventBus);
         ItemInit.ITEMS.register(eventBus);
+        FluidInit.FLUIDS.register(eventBus);
         ModEntityTypes.ENTITY_TYPES.register(eventBus);
         GuiInit.CONTAINER_TYPES.register(eventBus);
         SoundInit.SOUNDS.register(eventBus);
@@ -114,7 +111,7 @@ public class AlteredCoal
         @SubscribeEvent
         public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
         	final IForgeRegistry<Item> registry = event.getRegistry();
-        	BlockInit.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
+        	BlockInit.BLOCKS_WITH_ITEM.getEntries().stream().map(RegistryObject::get).forEach(block -> {
         		registry.register(new BlockItem(block, new Item.Properties().group(AlteredCoalGroup.instance)).setRegistryName(block.getRegistryName()));
         	});
         }
@@ -131,108 +128,5 @@ public class AlteredCoal
     	public ItemStack createIcon() {
     		return new ItemStack(ItemInit.STACK.get());
     	}
-    }
-    
-    ////////////////////////////////////////////////
-    //TODO move all below this line
-    ////////////////////////////////////////////////
-    public static final ResourceLocation FLUID_STILL = new ResourceLocation("minecraft:block/brown_mushroom_block");
-    public static final ResourceLocation FLUID_FLOWING = new ResourceLocation("minecraft:block/mushroom_stem");
-    public static final ResourceLocation FLUID_OVERLAY = new ResourceLocation("minecraft:block/obsidian");
-
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, MOD_ID);
-    public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, MOD_ID);
-
-    private static ForgeFlowingFluid.Properties makeProperties()
-    {
-        return new ForgeFlowingFluid.Properties(test_fluid, test_fluid_flowing,
-                FluidAttributes.builder(FLUID_STILL, FLUID_FLOWING).overlay(FLUID_OVERLAY).color(0x3F1080FF))
-                .bucket(test_fluid_bucket).block(test_fluid_block);
-    }
-
-    public static RegistryObject<FlowingFluid> test_fluid = FLUIDS.register("test_fluid", () ->
-            new ForgeFlowingFluid.Source(makeProperties())
-    );
-    public static RegistryObject<FlowingFluid> test_fluid_flowing = FLUIDS.register("test_fluid_flowing", () ->
-            new ForgeFlowingFluid.Flowing(makeProperties())
-    );
-
-    public static RegistryObject<FlowingFluidBlock> test_fluid_block = BLOCKS.register("test_fluid_block", () ->
-            new FlowingFluidBlock(test_fluid, Block.Properties.create(net.minecraft.block.material.Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops())
-    );
-    public static RegistryObject<Item> test_fluid_bucket = ITEMS.register("test_fluid_bucket", () ->
-            new BucketItem(test_fluid, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroup.MISC))
-    );
-
-    // WARNING: this doesn't allow "any fluid", only the fluid from this test mod!
-    public static RegistryObject<Block> fluidloggable_block = BLOCKS.register("fluidloggable_block", () ->
-            new FluidloggableBlock(Block.Properties.create(Material.WOOD).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops())
-    );
-    public static RegistryObject<Item> fluidloggable_blockitem = ITEMS.register("fluidloggable_block", () ->
-            new BlockItem(fluidloggable_block.get(), new Item.Properties().group(ItemGroup.MISC))
-    );
-    
-    public void loadComplete(FMLLoadCompleteEvent event)
-    {
-        // some sanity checks
-        BlockState state = Fluids.WATER.getDefaultState().getBlockState();
-        BlockState state2 = Fluids.WATER.getAttributes().getBlock(null,null,Fluids.WATER.getDefaultState());
-        Validate.isTrue(state.getBlock() == Blocks.WATER && state2 == state);
-        ItemStack stack = Fluids.WATER.getAttributes().getBucket(new FluidStack(Fluids.WATER, 1));
-        Validate.isTrue(stack.getItem() == Fluids.WATER.getFilledBucket());
-    }
-
-    // WARNING: this doesn't allow "any fluid", only the fluid from this test mod!
-    private static class FluidloggableBlock extends Block implements IWaterLoggable
-    {
-        public static final BooleanProperty FLUIDLOGGED = BooleanProperty.create("fluidlogged");
-
-        public FluidloggableBlock(Properties properties)
-        {
-            super(properties);
-            setDefaultState(getStateContainer().getBaseState().with(FLUIDLOGGED, false));
-        }
-
-        @Override
-        protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-        {
-            builder.add(FLUIDLOGGED);
-        }
-
-        @Override
-        public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
-            return !state.get(FLUIDLOGGED) && fluidIn == test_fluid.get();
-        }
-
-        @Override
-        public boolean receiveFluid(IWorld worldIn, BlockPos pos, BlockState state, IFluidState fluidStateIn) {
-            if (canContainFluid(worldIn, pos, state, fluidStateIn.getFluid())) {
-                if (!worldIn.isRemote()) {
-                    worldIn.setBlockState(pos, state.with(FLUIDLOGGED, true), 3);
-                    worldIn.getPendingFluidTicks().scheduleTick(pos, fluidStateIn.getFluid(), fluidStateIn.getFluid().getTickRate(worldIn));
-                }
-
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
-            if (state.get(FLUIDLOGGED)) {
-                worldIn.setBlockState(pos, state.with(FLUIDLOGGED, false), 3);
-                return test_fluid.get();
-            } else {
-                return Fluids.EMPTY;
-            }
-        }
-
-        @Override
-        public IFluidState getFluidState(BlockState state)
-        {
-            return state.get(FLUIDLOGGED) ? test_fluid.get().getDefaultState() : Fluids.EMPTY.getDefaultState();
-        }
     }
 }
